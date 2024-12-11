@@ -1,9 +1,9 @@
+'use client'
 import { useContext } from "react";
-
-import { useRouter } from "next/router";
 import React from "react";
 import { AuthContext } from "./AuthProvider";
 import useToast from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
