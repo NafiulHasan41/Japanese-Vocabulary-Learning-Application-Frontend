@@ -36,7 +36,7 @@ export default function Login({ setToggle }: { setToggle: Dispatch<SetStateActio
     throw new Error("AuthContext must be used within an AuthProvider");
   }
 
-  const { signIn } = authContext;
+  const { signIn , user } = authContext;
   const router = useRouter();
   const showToast = useToast();
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -53,7 +53,13 @@ export default function Login({ setToggle }: { setToggle: Dispatch<SetStateActio
     try {
       await signIn(data.email, data.password);
       showToast("success", "Login successful");
-      router.push("/lessons");
+
+       if (user?.role === "admin") {
+        router.push("/dashboard");
+       
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       if (error instanceof Error) {
         showToast("error", error.message);

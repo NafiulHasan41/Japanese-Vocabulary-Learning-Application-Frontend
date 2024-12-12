@@ -75,7 +75,7 @@ export default function Registration({ setToggle }: { setToggle: Dispatch<SetSta
         router.push("/dashboard");
        
       } else {
-        router.push("/lessons");
+        router.push("/");
       }
     } catch (error) {
       if (error instanceof Error) {

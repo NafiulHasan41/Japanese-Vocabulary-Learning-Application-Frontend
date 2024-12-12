@@ -37,7 +37,8 @@ const PrivateRoute = ({ children, adminOnly }: PrivateRouteProps) => {
   }
 
   if (adminOnly && user.role !== "admin") {
-    router.push("/authentication"); 
+
+    router.push("/"); 
     showToast("warning", "You are not authorized to view this page");
     return null;
   }

@@ -2,6 +2,7 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import useToast from "@/hooks/useToast";
 
 
 export interface User {
@@ -30,6 +31,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const showToast = useToast();
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL ;
 
@@ -60,6 +62,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logOut = () => {
     localStorage.removeItem("token");
+    showToast(  "success" ,"Logged out successfully");
     setUser(null);
     router.push("/authentication");
   };
