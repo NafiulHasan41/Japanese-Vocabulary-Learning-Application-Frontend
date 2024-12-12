@@ -25,6 +25,7 @@ const FormSchema = z.object({
   whenToSay: z.string().min(1, { message: "Description is required" }),
   lessonNumber: z.number().positive({ message: "Lesson number must be positive" }),
   adminEmail: z.string().email({ message: "Admin email is required" }),
+  meaning: z.string().min(1, { message: "Meaning is required" }),
 });
 
 export default function AddVocabularyForm() {
@@ -35,7 +36,7 @@ export default function AddVocabularyForm() {
     throw new Error("AuthContext must be used within an AuthProvider");
   }
 
-  const {  user } = authContext;
+  const { user } = authContext;
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -44,6 +45,7 @@ export default function AddVocabularyForm() {
       whenToSay: "",
       lessonNumber: undefined,
       adminEmail: user?.email || "", // Prefill with user email
+      meaning: "",
     },
   });
 
@@ -105,6 +107,20 @@ export default function AddVocabularyForm() {
                 <FormLabel>When to Say</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter usage description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Meaning */}
+          <FormField
+            control={form.control}
+            name="meaning"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Meaning</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter meaning" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
