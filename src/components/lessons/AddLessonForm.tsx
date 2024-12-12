@@ -32,7 +32,7 @@ export default function AddLessonForm() {
       showToast("success", "Lesson added successfully!");
       form.reset();
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         if (axios.isAxiosError(error)) {
             showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
           } else if (error instanceof Error) {
