@@ -7,6 +7,15 @@ import useToast from "@/hooks/useToast";
 import useAxios from "@/hooks/useAxios";
 import axios from "axios";
 import EditLessonDialog from "./EditLessonDialog";
+import {
+    Dialog,
+    DialogTrigger,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogFooter,
+  } from "@/components/ui/dialog";
+  
 
 
 interface Lesson {
@@ -19,9 +28,9 @@ interface Lesson {
 export default function LessonTable() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const showToast = useToast();
   const axios1 = useAxios();
+  const [deleteLessonId, setDeleteLessonId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -42,15 +51,14 @@ export default function LessonTable() {
     fetchLessons();
   }, [showToast]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this lesson? This action cannot be undone.")) {
-      return;
-    }
+  const handleDelete = async () => {
+    if (!deleteLessonId) return;
 
     try {
-      await axios1.delete(`/api/lessons/${id}`);
-      setLessons((prev) => prev.filter((lesson) => lesson._id !== id));
+      await axios1.delete(`/api/lessons/${deleteLessonId}`);
+      setLessons((prev) => prev.filter((lesson) => lesson._id !== deleteLessonId));
       showToast("success", "Lesson deleted successfully");
+      setDeleteLessonId(null); 
     } catch (error) {
       if (axios.isAxiosError(error)) {
         showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
@@ -95,9 +103,39 @@ export default function LessonTable() {
                     showToast("success", "Lesson updated successfully");
                   }}
                 />
-                <Button variant="destructive" onClick={() => handleDelete(lesson._id)}>
-                  Delete
-                </Button>
+                      <div>
+                          <Dialog open={!!deleteLessonId} onOpenChange={(isOpen) => !isOpen && setDeleteLessonId(null)}>
+                              <DialogTrigger asChild>
+                                  <Button
+                                      variant="destructive"
+                                      onClick={() => setDeleteLessonId(lesson._id)}
+                                  >
+                                      Delete
+                                  </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                  <DialogHeader>
+                                      <DialogTitle>Confirm Deletion</DialogTitle>
+                                  </DialogHeader>
+                                  <p>
+                                      Are you sure you want to delete the lesson "
+                                      <strong>{lesson.name}</strong>"? This action cannot be undone.
+                                  </p>
+                                  <DialogFooter className="flex justify-end space-x-2">
+                                      <Button
+                                          variant="ghost"
+                                          onClick={() => setDeleteLessonId(null)}
+                                      >
+                                          Cancel
+                                      </Button>
+                                      <Button variant="destructive" onClick={handleDelete}>
+                                          Delete
+                                      </Button>
+                                  </DialogFooter>
+                              </DialogContent>
+                          </Dialog>
+                      </div>
+        
               </TableCell>
             </TableRow>
           ))}

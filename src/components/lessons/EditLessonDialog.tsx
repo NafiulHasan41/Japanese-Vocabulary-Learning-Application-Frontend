@@ -28,6 +28,7 @@ export default function EditLessonDialog({ lesson, onSave }: EditLessonDialogPro
   });
 
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); 
   const axios1 = useAxios();
 
   const handleEditSubmit = async (data: { name: string; lessonNumber: number }) => {
@@ -35,6 +36,7 @@ export default function EditLessonDialog({ lesson, onSave }: EditLessonDialogPro
     try {
       const response = await axios1.put(`/api/lessons/${lesson._id}`, data);
       onSave({ ...lesson, ...data });
+      setIsOpen(false);
     } catch (error) {
       console.error("Failed to update lesson:", error);
     } finally {
@@ -42,10 +44,15 @@ export default function EditLessonDialog({ lesson, onSave }: EditLessonDialogPro
     }
   };
 
+  const handleCancel = () => {
+    reset(); 
+    setIsOpen(false); 
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit</Button>
+        <Button variant="outline" onClick={() => setIsOpen(true)}>Edit</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -65,7 +72,7 @@ export default function EditLessonDialog({ lesson, onSave }: EditLessonDialogPro
             />
           </div>
           <div className="flex justify-end space-x-2">
-            <Button type="button" variant="ghost" onClick={() => reset()}>
+            <Button type="button" variant="ghost" onClick={handleCancel}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
