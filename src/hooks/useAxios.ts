@@ -1,18 +1,15 @@
 'use client';
 import axios from "axios";
-import { useEffect } from "react";
 
 const useAxios = () => {
-  const instance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL ,
-  });
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null; 
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-  }, []);
+  const instance = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      ...(token && { Authorization: `Bearer ${token}` }), 
+    },
+  });
 
   return instance;
 };
