@@ -2,13 +2,15 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useToast from "@/hooks/useToast";
 import useAxios from "@/hooks/useAxios";
+import axios from "axios";
+import EditLessonDialog from "./EditLessonDialog";
+
 
 interface Lesson {
-  id: string;
+  _id: string;
   name: string;
   lessonNumber: number;
   vocabularyCount: number;
@@ -17,7 +19,7 @@ interface Lesson {
 export default function LessonTable() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
   const showToast = useToast();
   const axios1 = useAxios();
 
@@ -25,11 +27,13 @@ export default function LessonTable() {
     const fetchLessons = async () => {
       try {
         const { data } = await axios1.get<Lesson[]>("/api/lessons");
-        // console.log("inside ", data);
         setLessons(data);
       } catch (error) {
-        showToast("error", "Failed to fetch lessons");
-        console.error("Fetch error:", error);
+        if (axios.isAxiosError(error)) {
+          showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
+        } else {
+          showToast("error", "Failed to fetch lessons");
+        }
       } finally {
         setLoading(false);
       }
@@ -38,10 +42,6 @@ export default function LessonTable() {
     fetchLessons();
   }, [showToast]);
 
-  const handleEdit = (id: string) => {
-    router.push(`/lessons/edit/${id}`);
-  };
-
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this lesson? This action cannot be undone.")) {
       return;
@@ -49,11 +49,14 @@ export default function LessonTable() {
 
     try {
       await axios1.delete(`/api/lessons/${id}`);
+      setLessons((prev) => prev.filter((lesson) => lesson._id !== id));
       showToast("success", "Lesson deleted successfully");
-      setLessons((prev) => prev.filter((lesson) => lesson.id !== id)); // Update local state
     } catch (error) {
-      showToast("error", "Failed to delete lesson");
-      console.error("Delete error:", error);
+      if (axios.isAxiosError(error)) {
+        showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
+      } else {
+        showToast("error", "An unknown error occurred");
+      }
     }
   };
 
@@ -78,15 +81,21 @@ export default function LessonTable() {
         </TableHeader>
         <TableBody>
           {lessons.map((lesson) => (
-            <TableRow key={lesson.id}>
+            <TableRow key={lesson._id}>
               <TableCell>{lesson.lessonNumber}</TableCell>
               <TableCell>{lesson.name}</TableCell>
               <TableCell>{lesson.vocabularyCount}</TableCell>
-              <TableCell className="space-x-2">
-                <Button variant="outline" onClick={() => handleEdit(lesson.id)}>
-                  Edit
-                </Button>
-                <Button variant="destructive" onClick={() => handleDelete(lesson.id)}>
+              <TableCell className="space-x-2 flex flex-col gap-2 md:flex-row">
+                <EditLessonDialog
+                  lesson={lesson}
+                  onSave={(updatedLesson) => {
+                    setLessons((prev) =>
+                      prev.map((l) => (l._id === updatedLesson._id ? updatedLesson : l))
+                    );
+                    showToast("success", "Lesson updated successfully");
+                  }}
+                />
+                <Button variant="destructive" onClick={() => handleDelete(lesson._id)}>
                   Delete
                 </Button>
               </TableCell>
