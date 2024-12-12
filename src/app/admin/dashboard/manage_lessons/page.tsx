@@ -1,5 +1,7 @@
 
 
+
+import LessonTable from "@/components/lessons/LessonTable";
 import PrivateRoute from "@/provider/PrivateRoute";
 import { Metadata } from "next";
 
@@ -15,7 +17,10 @@ export default function page() {
   return (
     <div className=" p-3 max-w-screen-xl mx-auto">
       <PrivateRoute adminOnly>
-       <h1> Welcome to your lesson management page  </h1>
+      <h1 className=" text-[18px] md:text-xl text-black font-bold">MANAGE LESSON HERE   </h1>
+       <div className=" mt-2 md:mt-5 lg:mt-10">
+      <LessonTable/>
+       </div>
     </PrivateRoute>
     </div>
   );
