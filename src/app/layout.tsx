@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import AuthProvider from "@/provider/AuthProvider";
 import Navbar from "@/components/global/navbar/Navbar";
 import Footer from "@/components/global/footer/Footer";
+// import { headers } from "next/headers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,19 +28,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  // const pathname = headers().get("x-nextjs-page-path") || "/";
+  // console.log("pathname", pathname);
+  // const isAdminRoute = pathname.startsWith("/admin");
+  // console.log("isAdminRoute", isAdminRoute);
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider>
-        <Navbar/>
+        {/* {!isAdminRoute && <Navbar />} */}
+        <Navbar />
         <div className="min-h-[calc(100vh-4rem)]">
         {children}
         </div>  
         
         <Toaster/>
-        <Footer/>
+        <Footer />
+        {/* {!isAdminRoute && <Footer />} */}
         </AuthProvider>
       </body>
     </html>
