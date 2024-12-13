@@ -70,7 +70,7 @@ export default function LessonPage({ params }: { params: { id: string } }) {
         <Confetti width={width} height={height} />
         <h1 className="text-2xl font-bold mb-4">Congratulations! Lesson Completed</h1>
         <Link href="/">
-          <Button className="mt-4">Go Back to Lessons</Button>
+          <Button className="mt-4 bg-sky-400">Go Back to Lessons</Button>
         </Link>
       </div>
     );
@@ -93,10 +93,10 @@ export default function LessonPage({ params }: { params: { id: string } }) {
         <p className="text-gray-500">{whenToSay}</p>
       </div>
       <div className="mt-4 flex justify-between">
-        <Button onClick={handlePrevious} disabled={currentIndex === 0}>
+        <Button onClick={handlePrevious} disabled={currentIndex === 0} className="text-black font-semibold bg-sky-400">
           Previous
         </Button>
-        <Button onClick={handleNext}>
+        <Button onClick={handleNext} className="bg-sky-400 text-black font-semibold">
           {currentIndex === vocabularies.length - 1 ? "Complete" : "Next"}
         </Button>
       </div>

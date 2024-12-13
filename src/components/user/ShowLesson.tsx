@@ -41,10 +41,11 @@ export default function LessonsPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {lessons.map((lesson) => (
-            <div key={lesson.lessonNumber} className="p-4 border rounded shadow">
-              <h2 className="text-lg font-semibold">{lesson.name}</h2>
+            <div key={lesson.lessonNumber} className="p-4 shadow-xl border rounded bg-sky-100">
+              <h2 className="text-lg font-semibold">Lesson Name: {lesson.name}</h2>
+                <p>Lesson Number: {lesson.lessonNumber}</p>
               <Link href={`/lesson/${lesson.lessonNumber}`}>
-                <Button className="mt-2">Go to Lesson</Button>
+                <Button className="mt-2 text-black font-bold bg-sky-500">Go to Lesson</Button>
               </Link>
             </div>
           ))}
