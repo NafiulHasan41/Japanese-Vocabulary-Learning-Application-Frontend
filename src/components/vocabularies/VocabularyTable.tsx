@@ -56,7 +56,7 @@ export default function VocabularyTable() {
 
     fetchVocabularies();
   }, [showToast]);
-
+ // working fine
   const handleDelete = async () => {
     if (!deleteVocabularyId) return;
 
