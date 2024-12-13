@@ -145,7 +145,7 @@ export default function VocabularyTable() {
                         <DialogTitle>Confirm Deletion</DialogTitle>
                       </DialogHeader>
                       <p>
-                        Are you sure you want to delete the vocabulary "<strong>{vocabulary.word}</strong>"? This
+                        Are you sure you want to delete the vocabulary &quot;<strong>{vocabulary.word}</strong>&quot;? This
                         action cannot be undone.
                       </p>
                       <DialogFooter className="flex justify-end space-x-2">

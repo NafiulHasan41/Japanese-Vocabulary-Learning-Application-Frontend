@@ -61,7 +61,7 @@ export default function EditVocabularyDialog({
   }) => {
     setLoading(true);
     try {
-      const response = await axiosInstance.put(`/api/vocabularies/${vocabulary._id}`, data);
+      await axiosInstance.put(`/api/vocabularies/${vocabulary._id}`, data);
       onSave({ ...vocabulary, ...data });
       setIsOpen(false); 
     } catch (error) {

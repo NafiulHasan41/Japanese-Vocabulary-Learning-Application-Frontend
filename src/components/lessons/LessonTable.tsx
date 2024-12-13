@@ -118,8 +118,8 @@ export default function LessonTable() {
                                       <DialogTitle>Confirm Deletion</DialogTitle>
                                   </DialogHeader>
                                   <p>
-                                      Are you sure you want to delete the lesson "
-                                      <strong>{lesson.name}</strong>"? This action cannot be undone.
+                                      Are you sure you want to delete the lesson &quot;
+                                      <strong>{lesson.name}</strong> &quot; ? This action cannot be undone.
                                   </p>
                                   <DialogFooter className="flex justify-end space-x-2">
                                       <Button

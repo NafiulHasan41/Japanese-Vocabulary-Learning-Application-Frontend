@@ -3,7 +3,6 @@ import React, { useContext, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  FaHome,
   FaList,
   FaUsers,
   FaBook,
@@ -12,6 +11,7 @@ import {
 } from "react-icons/fa";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { AuthContext } from "@/provider/AuthProvider";
+import Image from "next/image";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -86,10 +86,12 @@ const Sidebar: React.FC = () => {
                   <div className="w-full">
                     {/* User Info */}
                     <div className="flex flex-col items-center mt-6 -mx-2">
-                      <img
+                      <Image
                         className="object-cover w-24 h-24 mx-2 rounded-full"
-                        src={user?.imageURL}
+                        src={user?.imageURL || ''}
                         alt="avatar"
+                        width={60}
+                        height={60}
                       />
                       <h4 className="mx-2 mt-2 font-medium text-gray-800">{user?.name}</h4>
                       <p className="mx-2 mt-1 text-sm font-medium text-gray-600">{user?.email}</p>

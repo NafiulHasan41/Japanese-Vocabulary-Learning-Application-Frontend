@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useToast from "@/hooks/useToast";
 import useAxios from "@/hooks/useAxios";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 const FormSchema = z.object({
   name: z.string().min(1, { message: "Lesson name is required" }),

@@ -34,7 +34,7 @@ export default function EditLessonDialog({ lesson, onSave }: EditLessonDialogPro
   const handleEditSubmit = async (data: { name: string; lessonNumber: number }) => {
     setLoading(true);
     try {
-      const response = await axios1.put(`/api/lessons/${lesson._id}`, data);
+      await axios1.put(`/api/lessons/${lesson._id}`, data);
       onSave({ ...lesson, ...data });
       setIsOpen(false);
     } catch (error) {

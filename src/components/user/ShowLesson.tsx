@@ -5,6 +5,7 @@ import useAxios from "@/hooks/useAxios";
 import useToast from "@/hooks/useToast";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import axios from "axios";
 
 type Lesson = {
   name: string;
@@ -27,7 +28,14 @@ export default function LessonsPage() {
       const response = await axios1.get<Lesson[]>("/api/users/lessons");
       setLessons(response.data);
     } catch (error) {
-      showToast("error", "Failed to fetch lessons");
+      // console.log(error);
+      if (axios.isAxiosError(error)) {
+        showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
+      } else if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }

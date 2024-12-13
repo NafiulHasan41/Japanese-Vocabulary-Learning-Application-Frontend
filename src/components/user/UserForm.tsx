@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import useAxios from "@/hooks/useAxios";
 import useToast from "@/hooks/useToast";
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import axios from "axios";
 
 
 type User = {
@@ -31,7 +31,14 @@ export default function ManageUsers() {
       const response = await axios1.get<User[]>("/api/users");
       setUsers(response.data);
     } catch (error) {
-      showToast("error", "Failed to fetch users");
+       // console.log(error);
+       if (axios.isAxiosError(error)) {
+        showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
+      } else if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -43,7 +50,14 @@ export default function ManageUsers() {
       showToast("success", `${response.data.name}'s role updated to ${role}`);
       fetchUsers();
     } catch (error) {
-      showToast("error", "Failed to update user role");
+      // console.log(error);
+      if (axios.isAxiosError(error)) {
+        showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
+      } else if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unknown error occurred");
+      }
     }
   };
 

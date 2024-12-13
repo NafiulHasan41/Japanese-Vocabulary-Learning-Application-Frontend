@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Link from "next/link";
+import axios from "axios";
 
 type Vocabulary = {
   word: string;
@@ -34,7 +35,14 @@ export default function LessonPage({ params }: { params: { id: string } }) {
       const response = await axios1.get<Vocabulary[]>(`/api/users/lessons/${id}/vocabularies`);
       setVocabularies(response.data);
     } catch (error) {
-      showToast("error", "Failed to fetch vocabularies");
+      // console.log(error);
+      if (axios.isAxiosError(error)) {
+        showToast("error", (error.response?.data as { message?: string })?.message || "An error occurred");
+      } else if (error instanceof Error) {
+        showToast("error", error.message);
+      } else {
+        showToast("error", "An unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }
